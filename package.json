@@ -1,0 +1,27 @@
+{
+  "name": "whats_bot",
+  "version": "1.0.0",
+  "description": "bot to sent messages to whatsapp",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Postgres",
+    "node",
+    "express"
+  ],
+  "author": "Larissa Dantas Requena",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "geckodriver": "^1.19.1",
+    "method-override": "^3.0.0",
+    "nodemon": "^2.0.4",
+    "pg": "^7.18.2",
+    "selenium-webdriver": "^4.0.0-alpha.7"
+  }
+}
