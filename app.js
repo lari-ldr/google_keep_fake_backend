@@ -32,16 +32,19 @@ app.use(function(req, res, next) {
     next();
     });
           
-const pool = new Pool({
-    user: "google_keep_fake",
-    host: "localhost",
-    database: "google_keep_fake",
-    password: "Free84LA",
-    port: 5432
-});
+// const pool = new Pool({
+//     user: "google_keep_fake",
+//     host: "localhost",
+//     database: "google_keep_fake",
+//     password: "Free84LA",
+//     port: 5432
+// });
 
 const notesRoutes = require('./routes/notes');
+const notesConfigsRoutes = require('./routes/notesConfigs');
 app.use(notesRoutes)
+app.use(notesConfigsRoutes)
+
 
 // ================================================================
 app.listen(process.env.PORT, ()=>{

@@ -2,8 +2,9 @@ const   express = require("express"),
         router = express.Router()
 
 const   {
-    mainServerAdvise,
+    mainPage,
     getAllNotes,
+    getAllNotesWithTheConfigs,
     getNewNote,
     postNewNote,
     putAExistingNote,
@@ -11,20 +12,17 @@ const   {
     notExistPageOrRoute
 } = require('../controllers/notes');
 
-router.get("/", mainServerAdvise)
-
+router.get("/", mainPage)
+router.get("/merda", getAllNotesWithTheConfigs)
 // list all notes
 router.get("/index", getAllNotes)
-
 // get create a new note "/index/:id/new"
 router.get("/index/:id", getNewNote)
 // post created new note
 router.post("/index/:id", postNewNote)
-
 // here should have a get request with the url "/index/:id/edit"
 // than put like this
 router.put("/index/:id", putAExistingNote)
-
 // delete request
 router.delete("/index/:id", deleteNote)
 

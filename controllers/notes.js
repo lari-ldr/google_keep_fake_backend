@@ -10,13 +10,26 @@ const pool = new Pool({
 });
 
 module.exports ={
-    mainServerAdvise(req, res){
-        res.send("This is the main page. To see all the notes, please type /index in the url.")
+
+    mainPage(req,res){
+        res.send("This is the main page, please type /index to see all notes, or type /merda to see all the notes and settins")
     },
 
     getAllNotes(req, res){
         pool.query(
             `SELECT * FROM notes`, (err, results)=>{
+                if(err){
+                    console.log(err);
+                    return err;
+                }
+                res.send(results.rows)
+            }
+        )
+    },
+
+    getAllNotesWithTheConfigs(req, res){
+        pool.query(
+            `SELECT * FROM notes JOIN notesconfigs ON id = notesconfigs.note_id`, (err, results)=>{
                 if(err){
                     console.log(err);
                     return err;
