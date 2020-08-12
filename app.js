@@ -174,20 +174,21 @@ app.post("/settings/:note_id", (req, res)=>{
         background_color,
         is_archived,
         is_pinned,
-        it_has_any_label
+        labels
     } = req.body
+    console.log(req.body)
 
-
-    pool.query(`INSERT INTO notesconfigs (note_id, background_color, is_archived, is_pinned, it_has_any_label ) VALUES ($1, $2, $3, $4, $5)`,
-    [note_id, background_color, is_archived, is_pinned, it_has_any_label], (err, result)=>{
+    pool.query(`INSERT INTO notesconfigs (note_id, background_color, is_archived, is_pinned, labels ) VALUES ($1, $2, $3, $4, $5)`,
+    [note_id, background_color, is_archived, is_pinned, labels], (err, result)=>{
         if(err){
             console.log(err);
             return err;
         }
         console.log("new note settings successfully added! ")
-        console.log(background_color,  is_archived, is_pinned, it_has_any_label)
+        console.log(background_color,  is_archived, is_pinned, labels)
         res.send(result)
     })
+
 })
 
 app.put("/settings/:id",(req, res)=>{
@@ -196,11 +197,11 @@ app.put("/settings/:id",(req, res)=>{
         background_color,
         is_archived,
         is_pinned,
-        it_has_any_label
+        labels
     } = req.body
 
-    pool.query(`UPDATE notesconfigs SET background_color = $1, is_archived = $2, is_pinned = $3, it_has_any_label = $4 WHERE note_id = ${note_id}`,
-    [ background_color, is_archived, is_pinned, it_has_any_label], (err, results)=>{
+    pool.query(`UPDATE notesconfigs SET background_color = $1, is_archived = $2, is_pinned = $3, labels = $4 WHERE note_id = ${note_id}`,
+    [ background_color, is_archived, is_pinned, labels], (err, results)=>{
         if(err){
             console.log(err)
             return err
