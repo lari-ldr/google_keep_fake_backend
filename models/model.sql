@@ -38,3 +38,10 @@ values ( 1, '#f28b82', false, false, false);
 
 insert into notesconfigs (note_id, background_color, is_archived, is_pinned, it_has_any_label)
 values ( 2, 'pink', false, true, false);
+
+-- -- one to many
+-- CREATE TABLE labels (
+-- 	note_id int NOT NULL,
+-- 	label_one VARCHAR(1000),
+-- 	label_two VARCHAR(1000),
+-- )

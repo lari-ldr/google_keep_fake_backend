@@ -13,7 +13,7 @@ const   {
 } = require('../controllers/notes');
 
 router.get("/", mainPage)
-router.get("/merda", getAllNotesWithTheConfigs)
+router.get("/all", getAllNotesWithTheConfigs)
 // list all notes
 router.get("/index", getAllNotes)
 // get create a new note "/index/:id/new"

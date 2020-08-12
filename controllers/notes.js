@@ -56,8 +56,6 @@ module.exports ={
             content
             // created
         } = req.body
-        // console.log(req.body)
-        // const {notes} = req.body
     
         pool.query(`INSERT INTO notes (title, content, created) VALUES ($1, $2, to_timestamp(${Date.now()}/1000.0))`,
         [title, content], (err, result)=>{
