@@ -51,6 +51,7 @@ app.get("/", (req,res)=>{
 
 app.get("/notes",(req, res)=>{
     pool.query(
+        
         `SELECT * FROM notes`, (err, results)=>{
             if(err){
                 console.log(err);
@@ -174,18 +175,16 @@ app.post("/settings/:note_id", (req, res)=>{
         background_color,
         is_archived,
         is_pinned,
-        labels
     } = req.body
     console.log(req.body)
 
-    pool.query(`INSERT INTO notesconfigs (note_id, background_color, is_archived, is_pinned, labels ) VALUES ($1, $2, $3, $4, $5)`,
-    [note_id, background_color, is_archived, is_pinned, labels], (err, result)=>{
+    pool.query(`INSERT INTO notesconfigs (note_id, background_color, is_archived, is_pinned ) VALUES ($1, $2, $3, $4)`,
+    [note_id, background_color, is_archived, is_pinned], (err, result)=>{
         if(err){
             console.log(err);
             return err;
         }
         console.log("new note settings successfully added! ")
-        console.log(background_color,  is_archived, is_pinned, labels)
         res.send(result)
     })
 
@@ -197,11 +196,10 @@ app.put("/settings/:id",(req, res)=>{
         background_color,
         is_archived,
         is_pinned,
-        labels
     } = req.body
 
-    pool.query(`UPDATE notesconfigs SET background_color = $1, is_archived = $2, is_pinned = $3, labels = $4 WHERE note_id = ${note_id}`,
-    [ background_color, is_archived, is_pinned, labels], (err, results)=>{
+    pool.query(`UPDATE notesconfigs SET background_color = $1, is_archived = $2, is_pinned = $3 WHERE note_id = ${note_id}`,
+    [ background_color, is_archived, is_pinned], (err, results)=>{
         if(err){
             console.log(err)
             return err
@@ -212,12 +210,192 @@ app.put("/settings/:id",(req, res)=>{
 });
 
 // ================================================================
-// ===================== LABELS ROUTES ============================
+// ===================== LABELS ROUTES OK =========================
 // ================================================================
+// show all labels
+app.get("/labels", (req, res)=>{
+    pool.query(
+        `SELECT * FROM labels`, (err, results)=>{
+            if(err){
+                console.log(err);
+                return err;
+            }
+            res.send(results.rows)
+        }
+    )
+});
 
-app.get("/labels", (req,res)=>{
-    res.send("this is will be the labels settings one day");
+// get one label
+app.get("/labels/:id", (req, res)=>{
+    const id = parseInt(req.params.id)
+    pool.query(
+        `SELECT * FROM labels WHERE id = ${id}`, (err, labelResults)=>{
+            if(err){
+                console.log(err);
+                return err;
+            }
+            res.send(labelResults.rows)
+        }
+    )
+});
+
+// post a new label
+app.post("/labels/:id", (req, res)=>{
+    const{
+        id,
+        labels
+    } = req.body
+    console.log(req.body)
+    pool.query(
+        `INSERT INTO labels (id, labels) VALUES ($1, $2)`, [id, labels], (err, labelResults)=>{
+            if(err){
+                console.log(err);
+                return err;
+            }
+            console.log("new label successfully added! ")
+            res.send(labelResults)
+        }
+    )
+});
+// update a existing label
+app.put("/labels/:id", (req, res)=>{
+    const id = parseInt(req.params.id)
+    const{
+        labels
+    } = req.body
+    console.log(req.body)
+    pool.query(
+        `UPDATE labels SET labels = $1 WHERE id = ${id}`, [labels], (err, labelResults)=>{
+            if(err){
+                console.log(err);
+                return err;
+            }
+            console.log(`label successfully updated, LABEL_ID is: ${id}`)
+            res.send(labelResults.rows)
+        }
+    )
+});
+
+// delete a label - working fine
+app.delete("/labels/:id", (req, res)=>{
+    const id = parseInt(req.params.id)
+    pool.query(`DELETE FROM labels WHERE id = ${id}`, (err, labelResults)=>{
+        if(err){
+            console.log(err);
+            return err;
+        }
+        console.log("label successfully removed!")
+        res.send(labelResults.rows)
+    })
+});
+// ============================================================================================================================
+// RELAÇÃO LABEL COM NOTES
+// mostra todas as notas que pertecem a uma mesma label - errado
+app.get("/z/:id",(req, res)=>{
+    const id = parseInt(req.params.id)
+    pool.query(
+        // `SELECT labels.id, labels, notes.id, title, content, created FROM notes,labels WHERE labels.id = ${id}`
+        `SELECT notes_labels.note_id, notes_labels.label_id, labels.labels, labels.id,notes FROM notes_labels, labels, notes WHERE notes_labels.label_id = 1 AND labels.id = 1`
+        , (err, results)=>{
+            if(err){
+                console.log(err);
+                return err;
+            }
+            res.send(results.rows)
+        }
+    )
+});
+
+// mostra todas as labels pertecentes a uma mesma nota - errado
+app.get("/x/:id", (req, res)=>{
+    const id = parseInt(req.params.id)
+    pool.query(
+        // `SELECT distinct labels, notes.id, title,content,created FROM labels,notes WHERE (labels = 'filmes' OR labels = 'series') AND notes.id = 1`
+        // `SELECT distinct labels, notes.id FROM labels,notes WHERE notes.id = ${id}`
+        `SELECT distinct labels, notes.id, title, content, created FROM labels,notes WHERE notes.id = ${id}`
+        `SELECT distinct notes_labels.note_id, notes_labels.label_id, labels,notes.id, title, content FROM notes_labels, labels, notes WHERE notes_labels.note_id = 1 AND notes.id = 1`
+        // `SELECT distinct labels, notes.id FROM labels,notes WHERE (labels = 'filmes' OR labels = 'series' OR labels = 'livros') AND notes.id = 1`
+        , (err, results)=>{
+        if(err){
+            console.log(err);
+            return err;
+        }
+        res.send(results.rows)
+    })
 })
+
+// criar rota pra conectar label com notes
+app.get("/notes-labels", (req, res)=>{
+    pool.query(
+        `SELECT * FROM notes_labels`, (err, labelResults)=>{
+            if(err){
+                console.log(err);
+                return err;
+            }
+            res.send(labelResults.rows)
+        }
+    )
+});
+
+app.get("/notes-labels/:id", (req, res)=>{
+    const id = parseInt(req.params.id)
+    pool.query(
+        `SELECT * FROM notes_labels WHERE label_id = ${id} OR note_id = ${id}`, (err, labelResults)=>{
+            if(err){
+                console.log(err);
+                return err;
+            }
+            res.send(labelResults.rows)
+        }
+    )
+});
+
+// app.post("/labels-notes/:id", (req,res)=>{
+//     const{
+//         note_id,
+//         label_id
+//     } = req.body
+//     console.log(req.body)
+//     pool.query(`INSERT INTO notes_labels (note_id, label_id) VALUES ($1, $2)`, [note_id, label_id], (err, results)=>{
+//         if(err){
+//             console.log(err);
+//             return err;
+//         }
+//         res.send(results.rows)
+//     })
+// })
+
+app.put("/index/:id/labels-notes/:label_id", (req,res)=>{
+    const id = parseInt(req.params.id)
+    const label_id = parseInt(req.params.label_id)
+    // const{
+    //     note_id,
+    //     label_id
+    // } = req.body
+    // console.log(req.body)
+    pool.query(`INSERT INTO notes_labels (note_id, label_id) VALUES ($1, $2)`, [id, label_id], (err, results)=>{
+        if(err){
+            console.log(err);
+            return err;
+        }
+        res.send(results.rows)
+    })
+})
+
+// deletar o label da nota
+// DELETE FROM notes_labels WHERE note_id = 1 AND label_id = 1; (her - filmes)
+
+// USAR ESSES!!!!
+// Eu preciso mostrar todas as notas que pertecem a uma label - > SELECT labels.id, labels.labels, notes.id, notes.title,notes.
+// content, notes_labels.label_id, notes_labels.note_id FROM labels INNER JOIN notes_labels ON labels.id = notes_labels.label_id INNER JOIN notes ON notes.id = notes_labels.note_id WHERE labels.id = 2; (change the id basement on the link)
+// E
+// Todas as labels relacionadas a uma unica nota -> SELECT notes.id, notes.title, notes.content, labels.id, labels.labels, notes_labels.note_id, notes_labels.label_id FROM notes INNER JOIN notes_labels ON notes_labels.note_id = notes.id INNER JOIN labels ON notes_labels.label_id = labels.id;
+
+
+// it works - para editar a relação espefica entre nota e label
+// SELECT distinct notes_labels.note_id, notes_labels.label_id,notes.id, title, content, labels.id, labels FROM notes_labels, labels, notes WHERE notes_labels.note_id = 1 AND notes.id = 1 AND notes_labels.label_id = 1 AND labels.id = 1;
+// SELECT distinct notes_labels.note_id, notes_labels.label_id,notes.id, title, content, labels.id, labels FROM notes_labels, labels, notes WHERE notes_labels.note_id = 1 AND notes.id = 1;
+
 
 // ================================================================
 app.get("*",(req, res)=>{
