@@ -4,7 +4,6 @@ const   express = require("express"),
 const   {
     mainPage,
     getAllNotes,
-    getAllNotesWithTheConfigs,
     getNewNote,
     postNewNote,
     putAExistingNote,
@@ -12,8 +11,8 @@ const   {
     notExistPageOrRoute
 } = require('../controllers/notes');
 
-router.get("/", mainPage)
-router.get("/all", getAllNotesWithTheConfigs)
+// router.get("/", mainPage)
+
 // list all notes
 router.get("/index", getAllNotes)
 // get create a new note "/index/:id/new"
@@ -26,6 +25,6 @@ router.put("/index/:id", putAExistingNote)
 // delete request
 router.delete("/index/:id", deleteNote)
 
-router.get("*", notExistPageOrRoute);
+// router.get("*", notExistPageOrRoute); 
 
 module.exports = router;

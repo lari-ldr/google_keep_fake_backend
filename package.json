@@ -1,7 +1,7 @@
 {
-  "name": "whats_bot",
+  "name": "google_keep_fake",
   "version": "1.0.0",
-  "description": "bot to sent messages to whatsapp",
+  "description": "recreate google keep layout and functionalities",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
