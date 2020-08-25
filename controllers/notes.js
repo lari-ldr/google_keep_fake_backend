@@ -90,6 +90,49 @@ module.exports ={
         })
     },
 
+    putCreateANewRelationship(req,res){
+        const id = parseInt(req.params.id)
+        const label_id = parseInt(req.params.label_id)
+        console.log(id)
+        console.log(label_id)
+        // const{
+        //     note_id,
+        //     label_id
+        // } = req.body
+        // console.log(req.body)
+        pool.query(`INSERT INTO notes_labels (note_id, label_id) VALUES ($1, $2)`, [id, label_id], (err, results)=>{
+            if(err){
+                console.log(err);
+                return err;
+            }
+            console.log(`new note and label relationship successfully created! NOTE_ID is: ${id} and LABEL_ID is: ${label_id}`)
+            res.send(results.rows)
+        })
+    },
+    deleteARelationship(req, res){
+        const id = parseInt(req.params.id)
+        const label_id = parseInt(req.params.label_id)
+        pool.query(`DELETE FROM notes_labels WHERE note_id = ${id} AND label_id = ${label_id}`, (err, results)=>{
+            if(err){
+                console.log(err);
+                return err;
+            }
+            console.log("note and label relationship successfully removed!")
+            res.send(results.rows)
+        })
+    },
+
+    allLabelsOfASpeficNote(req,res){
+        const id = parseInt(req.params.id)
+        pool.query(`SELECT notes.id, notes.title, notes.content, labels.id, labels.labels, notes_labels.note_id, notes_labels.label_id FROM notes INNER JOIN notes_labels ON notes_labels.note_id = notes.id INNER JOIN labels ON notes_labels.label_id = labels.id WHERE notes.id = ${id}`, (err, results)=>{
+            if(err){
+                console.log(err)
+                return err;
+            }
+            res.send(results.rows)
+        })
+    },
+
     notExistPageOrRoute(req, res){
         res.send("THIS PAGE OR ROUTE DOESN'T EXIST!");
     }

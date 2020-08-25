@@ -6,7 +6,8 @@ const{
     getANewLabel,
     postANewLabel,
     putALabel,
-    deleteALabel
+    deleteALabel,
+    allNotesOfASpeficiLabel
 } = require('../controllers/labels');
 
 router.get("/labels", getAllLabels);
@@ -21,5 +22,7 @@ router.put("/labels/:id", putALabel);
 
 // delete a label - working fine
 router.delete("/labels/:id", deleteALabel);
+
+router.get("/labels/:id/see_all_noteslabels", allNotesOfASpeficiLabel )
 
 module.exports = router;

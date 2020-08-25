@@ -18,6 +18,7 @@ CREATE TABLE notes (
 	title VARCHAR(1000) NOT NULL,
 	content TEXT NOT NULL,
 	created TIMESTAMP NOT NULL,
+	search_vector TSVECTOR,
 	PRIMARY KEY (id)
 );
 -- valid child table

@@ -8,6 +8,9 @@ const   {
     postNewNote,
     putAExistingNote,
     deleteNote,
+    putCreateANewRelationship,
+    deleteARelationship,
+    allLabelsOfASpeficNote,
     notExistPageOrRoute
 } = require('../controllers/notes');
 
@@ -25,6 +28,13 @@ router.put("/index/:id", putAExistingNote)
 // delete request
 router.delete("/index/:id", deleteNote)
 
+// create a new relationship - testar no postman
+router.put("/index/:id/notes_labels/:label_id", putCreateANewRelationship )
+
+// delete a relationship - testar no postman
+router.delete("/index/:id/notes_labels/:label_id", deleteARelationship )
+
+router.get("/index/:id/see_all_noteslabels", allLabelsOfASpeficNote )
 // router.get("*", notExistPageOrRoute); 
 
 module.exports = router;

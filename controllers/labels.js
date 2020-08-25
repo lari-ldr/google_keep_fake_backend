@@ -81,5 +81,19 @@ module.exports = {
             console.log("label successfully removed!")
             res.send(labelResults.rows)
         })
+    },
+
+    allNotesOfASpeficiLabel(req,res){
+        const id = parseInt(req.params.id)
+        pool.query(
+            // `SELECT labels.id, labels.labels, notes.id, notes.title,notes.content, notes_labels.label_id, notes_labels.note_id FROM labels INNER JOIN notes_labels ON labels.id = notes_labels.label_id INNER JOIN notes ON notes.id = notes_labels.note_id WHERE labels.id = 2`
+            `SELECT labels.id, labels.labels, notes.id, notes.title,notes.content, notes_labels.label_id, notes_labels.note_id, notesconfigs.note_id, notesconfigs.background_color, notesconfigs.is_archived, notesconfigs.is_pinned FROM labels INNER JOIN notes_labels ON labels.id = notes_labels.label_id INNER JOIN notes ON notes.id = notes_labels.note_id INNER JOIN notesconfigs ON notes.id = notesconfigs.note_id WHERE labels.id = ${id};`
+            , (err, results)=>{
+            if(err){
+                console.log(err)
+                return err;
+            }
+            res.send(results.rows)
+        })
     }
 }
