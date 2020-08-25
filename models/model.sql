@@ -17,8 +17,8 @@ CREATE TABLE notes (
 	id serial NOT NULL,
 	title VARCHAR(1000) NOT NULL,
 	content TEXT NOT NULL,
-	created TIMESTAMP NOT NULL,
 	search_vector TSVECTOR,
+	created TIMESTAMP NOT NULL,
 	PRIMARY KEY (id)
 );
 -- valid child table

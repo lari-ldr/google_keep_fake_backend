@@ -44,10 +44,16 @@ module.exports ={
             title,
             content
         } = req.body
-        console.log(req.body)
-    
-        pool.query(`INSERT INTO notes (id, title, content, created) VALUES ($1, $2, $3, to_timestamp(${Date.now()}/1000.0))`,
-        [id, title, content], (err, result)=>{
+        console.log(req.body)   
+        const search_vector = [title, content]
+        const values = [
+            id,
+            title,
+            content,
+            search_vector
+        ]
+        pool.query(`INSERT INTO notes (id, title, content, search_vector, created) VALUES ($1, $2, $3, to_tsvector($4), to_timestamp(${Date.now()}/1000.0))`,
+        values, (err, result)=>{
             if(err){
                 console.log(err);
                 return err;

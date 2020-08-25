@@ -44,9 +44,7 @@ const notesRoutes = require('./routes/notes');
 const settingsRoutes = require('./routes/settings');
 const labelsRoutes = require('./routes/labels');
 const notesLabelsRoutes = require('./routes/notes_labels');
-// app.use(notesRoutes);
-// app.use(settingsRoutes);
-// app.use(labelsRoutes);
+const searchNotes = require('./routes/searchNotes');
 
 app.get("/", (req,res)=>{
     res.send("This is the main page, please type /notes to see all notes, or type /index to see all the notes and settings")
@@ -56,6 +54,7 @@ app.use(notesRoutes);
 app.use(settingsRoutes);
 app.use(labelsRoutes);
 app.use(notesLabelsRoutes);
+app.use(searchNotes);
 
 // ================================================================
 app.get("*",(req, res)=>{
