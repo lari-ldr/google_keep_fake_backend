@@ -28,10 +28,10 @@ router.put("/index/:id", putAExistingNote)
 // delete request
 router.delete("/index/:id", deleteNote)
 
-// create a new relationship - testar no postman
+// create a new relationship
 router.put("/index/:id/notes_labels/:label_id", putCreateANewRelationship )
 
-// delete a relationship - testar no postman
+// delete a relationship
 router.delete("/index/:id/notes_labels/:label_id", deleteARelationship )
 
 router.get("/index/:id/see_all_noteslabels", allLabelsOfASpeficNote )

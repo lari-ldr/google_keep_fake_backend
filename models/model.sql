@@ -45,6 +45,7 @@ CREATE TABLE notes_labels(
 	label_id int NOT NULL,
 	PRIMARY KEY(note_id, label_id),
 	FOREIGN KEY (note_id) REFERENCES notes(id) ON UPDATE CASCADE,
+	FOREIGN KEY (note_id) REFERENCES notes(id) ON DELETE CASCADE,
 	FOREIGN KEY (label_id) REFERENCES labels(id) ON UPDATE CASCADE,
 	FOREIGN KEY (label_id) REFERENCES labels(id) ON DELETE CASCADE
 );
