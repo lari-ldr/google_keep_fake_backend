@@ -23,7 +23,7 @@ const pool = new Pool({
   user: 'google_keep_fake',
   host: 'localhost',
   database: 'google_keep_fake',
-  password: 'Free84LA',
+  password: process.env.PSQL_PASSWORD,
   port: 5432,
 });
 
